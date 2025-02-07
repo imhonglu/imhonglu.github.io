@@ -7,10 +7,12 @@ import Header from "../components/header.astro";
 import { DEFAULT_LOCALE } from "../i18n/consts";
 import { useTranslations } from "../i18n/utils/use-translations";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] & {
+  id?: string;
+};
 
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
-const { title, description, createdAt, updatedAt, heroImage } = Astro.props;
+const { id, title, description, createdAt, updatedAt, heroImage } = Astro.props;
 const t = useTranslations(locale);
 ---
 
@@ -79,6 +81,26 @@ const t = useTranslations(locale);
 					<slot />
 				</div>
 			</article>
+      {id && (
+          <div id="giscus"></div>
+          <script src="https://giscus.app/client.js"
+            data-repo="imhonglu/imhonglu.github.io"
+          data-repo-id="R_kgDONyKRuw"
+          data-category="Blog"
+          data-category-id="DIC_kwDONyKRu84CmvMP"
+          data-mapping="specific"
+          data-term={id}
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang={locale}
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+        </script>
+      )}
 		</main>
 		<Footer />
 	</body>
