@@ -1,0 +1,83 @@
+---
+import Icon from "./icon.astro";
+import type { IconName } from "./icons";
+
+interface Props {
+  label: string;
+  value: string;
+  icon: IconName;
+  width?: string;
+  options: Array<{
+    label: string;
+    value: string;
+    selected: boolean;
+  }>;
+}
+---
+
+<label style={`--select-width: ${Astro.props.width}`}>
+	<span class="sr-only">{Astro.props.label}</span>
+	<Icon name={Astro.props.icon} class="icon label-icon" />
+	<select value={Astro.props.value} autocomplete="off">
+		{
+			Astro.props.options.map(({ value, selected, label }) => (
+				<option value={value} selected={selected} set:html={label} />
+			))
+		}
+	</select>
+	<Icon name="down-caret" class="icon caret" />
+</label>
+
+<style>
+	label {
+		--label-icon-size: 0.875rem;
+		--caret-size: 1.25rem;
+		--inline-padding: 0.5rem;
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		color: var(--text-secondary);
+	}
+
+	label:hover {
+		color: var(--text-secondary);
+	}
+
+	.icon {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
+
+	.label-icon {
+		font-size: var(--label-icon-size);
+		inset-inline-start: 0;
+	}
+
+	.caret {
+		font-size: var(--caret-size);
+		inset-inline-end: 0;
+	}
+
+	select {
+		border: 0;
+		padding-block: 0.625rem;
+		padding-inline: calc(var(--label-icon-size) + var(--inline-padding) + 0.25rem)
+			calc(var(--caret-size) + var(--inline-padding) + 0.25rem);
+		margin-inline: calc(var(--inline-padding) * -1);
+		width: calc(var(--select-width) + var(--inline-padding) * 2);
+		background-color: transparent;
+		text-overflow: ellipsis;
+		color: inherit;
+		cursor: pointer;
+		appearance: none;
+	}
+
+	option {
+		background-color: var(--background);
+		color: var(--text-body);
+	}
+</style>
+

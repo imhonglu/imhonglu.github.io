@@ -1,0 +1,78 @@
+---
+import { useTranslations } from "../i18n/utils/use-translations";
+import Select from "./select.astro";
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<theme-select>
+	<Select
+		icon="laptop"
+		label={t('themeSelect.accessibleLabel')}
+		value="auto"
+		options={[
+			{ label: t('themeSelect.dark'), selected: false, value: 'dark' },
+			{ label: t('themeSelect.light'), selected: false, value: 'light' },
+			{ label: t('themeSelect.auto'), selected: true, value: 'auto' },
+		]}
+		width="6.5em"
+	/>
+</theme-select>
+
+<script>
+	type Theme = 'auto' | 'dark' | 'light';
+
+	const storageKey = 'theme';
+
+	const parseTheme = (theme: unknown): Theme => {
+    switch (theme) {
+      case 'auto':
+      case 'dark':
+      case 'light':
+        return theme;
+      default:
+        return 'auto';
+    }
+  }
+
+	const loadTheme = (): Theme =>
+		parseTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey));
+
+	const storeTheme = (theme: Theme): void => {
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem(storageKey, theme === 'light' || theme === 'dark' ? theme : '');
+		}
+	}
+
+	const getPreferredColorScheme = (): Theme =>
+		matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+	const onThemeChange = (theme: Theme): void => {
+		document.documentElement.dataset.theme = theme === 'auto' ? getPreferredColorScheme() : theme;
+		storeTheme(theme);
+	}
+
+	matchMedia(`(prefers-color-scheme: light)`).addEventListener('change', () => {
+		if (loadTheme() === 'auto') onThemeChange('auto');
+	});
+
+	class ThemeSelect extends HTMLElement {
+		constructor() {
+			super();
+      const select = this.querySelector('select');
+      const theme = loadTheme();
+      onThemeChange(theme);
+
+      if (select) {
+        select.value = theme;
+        select.addEventListener('change', (e) => {
+          if (e.currentTarget instanceof HTMLSelectElement) {
+            onThemeChange(parseTheme(e.currentTarget.value));
+          }
+        });
+      }
+
+		}
+	}
+	customElements.define('theme-select', ThemeSelect);
+</script>

@@ -1,0 +1,18 @@
+---
+import { getEntry, render } from "astro:content";
+import { DEFAULT_LOCALE } from "../i18n/consts";
+import Layout from "../layouts/blog-post.astro";
+
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const entry = await getEntry("about", locale);
+if (!entry) {
+  return locale === DEFAULT_LOCALE
+    ? Astro.redirect("/about")
+    : Astro.redirect(locale);
+}
+const { Content } = await render(entry);
+---
+
+<Layout {...entry.data}>
+  <Content />
+</Layout>

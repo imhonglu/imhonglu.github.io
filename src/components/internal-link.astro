@@ -1,0 +1,34 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import type { HTMLAttributes } from "astro/types";
+import { DEFAULT_LOCALE } from "../i18n/consts";
+
+export type Props = HTMLAttributes<"a"> & {
+  href: NonNullable<HTMLAttributes<"a">["href"]>;
+  isActive?: (href: string) => boolean;
+  activeClass?: string;
+};
+
+const { class: className, href, activeClass, isActive, ...props } = Astro.props;
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+
+const pathname = Astro.url.pathname;
+const localeHref = getRelativeLocaleUrl(locale, href.toString());
+const isActiveRoute = isActive
+  ? isActive(pathname.replace(`/${locale}`, ""))
+  : pathname === localeHref;
+---
+
+<a
+  href={localeHref}
+  class:list={[className, isActiveRoute ? activeClass : undefined]}
+  {...props}
+  >
+	<slot />
+</a>
+<style>
+	a {
+		display: inline-block;
+		text-decoration: none;
+	}
+</style>

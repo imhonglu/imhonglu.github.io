@@ -1,0 +1,63 @@
+---
+import { DEFAULT_LOCALE, LANGUAGES } from "../i18n/consts";
+import { useTranslations } from "../i18n/utils/use-translations";
+import Select from "./select.astro";
+
+const t = useTranslations(Astro.currentLocale);
+---
+<language-select>
+  <Select
+    icon="translate"
+    label={t('languageSelect.accessibleLabel')}
+    value={Astro.currentLocale ?? DEFAULT_LOCALE}
+    width="6.5em"
+    options={Object.entries(LANGUAGES).map(([code, locale]) => ({
+      value: code,
+      selected: code === Astro.currentLocale,
+      label: locale,
+    }))
+    }
+  />
+</language-select>
+
+<script>
+import { DEFAULT_LOCALE } from "../i18n/consts";
+
+  function updateLocaleInPathname(pathname: string, newLocale: string) {
+    const index = document.documentElement.lang === DEFAULT_LOCALE ? 1 : 2;
+    const pathSegments = pathname.split('/').slice(index).join('/');
+
+    return newLocale === DEFAULT_LOCALE ? `/${pathSegments}` : `/${newLocale}/${pathSegments}`
+  }
+
+	class LanguageSelect extends HTMLElement {
+		constructor() {
+			super();
+			const select = this.querySelector('select');
+			if (select) {
+				select.addEventListener('change', (e) => {
+					if (e.currentTarget instanceof HTMLSelectElement) {
+						window.location.pathname = updateLocaleInPathname(
+              window.location.pathname,
+              e.currentTarget.value
+            );
+					}
+				});
+
+				window.addEventListener('pageshow', (event) => {
+					if (!event.persisted) {
+						return;
+					}
+
+					const markupSelectedIndex =
+						select.querySelector<HTMLOptionElement>('option[selected]')?.index;
+
+					if (markupSelectedIndex !== select.selectedIndex) {
+						select.selectedIndex = markupSelectedIndex ?? 0;
+					}
+				});
+			}
+		}
+	}
+	customElements.define('language-select', LanguageSelect);
+</script>

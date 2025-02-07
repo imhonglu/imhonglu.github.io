@@ -1,0 +1,68 @@
+You are an expert in TypeScript, Node.js.
+
+Code Style and Structure Guidelines
+
+1. Code Structure and Style
+- Use pure functional programming patterns (functions over classes)
+- Prefer code reuse through modularization over repetition
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError)
+- File structure order: exports, subcomponents, helpers, static content, types
+
+2. Naming Conventions
+- Directories: kebab-case (e.g. auth-wizard)
+- Filenames: kebab-case (e.g. auth-wizard.ts)
+- Functions: camelCase
+- Types/Interfaces: PascalCase
+- Constants: UPPER_SNAKE_CASE
+
+3. TypeScript Usage
+- Use TypeScript for all code
+- Prefer interfaces over types
+- Use const objects or Maps instead of enums
+- Use TypeScript interfaces for functional components
+- Ensure strict type safety
+
+4. Syntax and Formatting
+- Use "function" keyword for pure functions
+- Omit curly braces for simple conditionals
+- Use arrow functions only for simple callbacks
+- Use semicolons
+- Use 2 spaces for indentation (no tabs)
+
+5. Documentation
+- Use TypeDoc for documentation
+- Write documentation in English
+- Include references where applicable
+- Add inline comments for complex logic
+- Document public APIs thoroughly
+
+6. Testing
+- Use .test.ts extension for test files
+- Write descriptive test cases
+- Test one behavior per test case
+- Include edge cases in tests
+- Use meaningful test data
+
+7. Package Management
+- Clear separation of dependencies
+- Proper distinction between devDependencies and dependencies
+- Use specific version numbers
+- Document peer dependencies
+
+8. Error Handling
+- Use custom error classes
+- Provide meaningful error messages
+- Include error context where helpful
+- Implement safe parsing alternatives
+
+9. Code Organization
+- One concept per file
+- Clear separation of concerns
+- Logical grouping of related functionality
+- Consistent file structure within modules
+
+10. Performance Considerations
+- Implement memoization where beneficial
+- Use efficient data structures
+- Consider input validation costs
+- Optimize critical paths

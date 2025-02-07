@@ -1,0 +1,14 @@
+{
+  "[html][yaml][javascript][javascriptreact][typescript][typescriptreact][json][jsonc][markdown][astro][css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "always"
+  },
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "search.exclude": {
+    "**/dist": true
+  }
+}

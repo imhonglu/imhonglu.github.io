@@ -1,0 +1,39 @@
+---
+import InternalLink, {
+  type Props as InternalLinkProps,
+} from "./internal-link.astro";
+
+type Props = InternalLinkProps;
+
+const { class: className, href, ...props } = Astro.props;
+---
+
+<InternalLink href={href} activeClass="active" {...props}>
+	<slot />
+</InternalLink>
+
+<style>
+  a {
+    position: relative;
+    transition: font-weight 0.2s, color 0.2s;
+  }
+  a:hover, a:active, a.active {
+    font-weight: bolder;
+    color: var(--accent);
+  }
+
+  a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 4px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent);
+    transition: width 0.2s ease;
+  }
+
+  a:hover::after, a:active::after, a.active::after {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import LanguageSelect from "./language-select.astro";
+import SocialLinks from "./social-links.astro";
+import ThemeSelect from "./theme-select.astro";
+---
+
+<footer>
+	&copy; 2025 imhonglu. All rights reserved.
+  <div class="controls">
+    <ThemeSelect />
+    <LanguageSelect />
+    <SocialLinks />
+  </div>
+</footer>
+
+<style>
+	footer {
+		padding: 2em 1em 6em 1em;
+		background: linear-gradient(var(--background-gradient)) no-repeat;
+		color: rgb(var(--text-secondary));
+		text-align: center;
+	}
+	.controls {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0 0.5rem;
+		margin-top: 1em;
+	}
+</style>

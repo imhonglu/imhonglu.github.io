@@ -1,0 +1,88 @@
+---
+import { SITE_TITLE } from "../consts";
+import { useTranslations } from "../i18n/utils/use-translations";
+import HeaderLink from "./header-link.astro";
+import InternalLink from "./internal-link.astro";
+import LanguageSelect from "./language-select.astro";
+import SocialLinks from "./social-links.astro";
+import ThemeSelect from "./theme-select.astro";
+
+const t = useTranslations(Astro.currentLocale);
+
+const isActive = (href: string) => {
+  if (href === "/") {
+    return true;
+  }
+
+  const slug = Number.parseInt(href.split("/")[1]);
+
+  return !Number.isNaN(slug);
+};
+---
+
+<header>
+	<nav>
+		<h2><InternalLink href="/">{SITE_TITLE}</InternalLink></h2>
+		<div class="nav-links">
+			<HeaderLink href="/" isActive={isActive}>{t('nav.home')}</HeaderLink>
+			<HeaderLink href="/about">{t('nav.about')}</HeaderLink>
+		</div>
+		<div class="controls">
+      <ThemeSelect />
+      <LanguageSelect />
+      <SocialLinks />
+    </div>
+	</nav>
+</header>
+<style>
+	header {
+		padding: 0 1em;
+		background: var(--background);
+		box-shadow: 0 2px 8px rgba(var(--text-primary), 0.05);
+		border-bottom: 1px solid rgba(var(--text-primary), 0.05);
+	}
+
+	:root[data-theme="dark"] header {
+		box-shadow: 0 1px 3px linear-gradient(var(--background-gradient));
+	}
+
+  nav,
+  nav > * {
+    display: flex;
+    align-items: center;
+  }
+  nav > * {
+    flex: 1;
+  }
+
+	h2 {
+		font-size: 1em;
+	}
+
+  a {
+		padding: 1em;
+		color: var(--text-primary);
+  }
+
+  nav {
+		justify-content: space-between;
+	}
+
+  .nav-links {
+    justify-content: center;
+  }
+
+	.controls {
+    justify-content: flex-end;
+    gap: 0 0.5rem;
+	}
+
+	@media (max-width: 768px) {
+    .nav-links {
+      justify-content: flex-end;
+    }
+		.controls {
+			display: none !important;
+		}
+	}
+</style>

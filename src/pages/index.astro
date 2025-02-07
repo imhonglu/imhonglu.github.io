@@ -1,0 +1,88 @@
+---
+import BaseHead from "../components/base-head.astro";
+import Footer from "../components/footer.astro";
+import FormattedDate from "../components/formatted-date.astro";
+import Header from "../components/header.astro";
+import InternalLink from "../components/internal-link.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { DEFAULT_LOCALE } from "../i18n/consts";
+import { getLocalizedBlogPosts } from "../utils/get-localized-blog-posts";
+
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const posts = await getLocalizedBlogPosts(locale).then((posts) =>
+  posts.filter((post) => post.data.publishedAt),
+);
+---
+
+<!doctype html>
+<html lang={Astro.currentLocale}>
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+			ul {
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+				padding: 0;
+				list-style-type: none;
+			}
+			ul li {
+        width: 100%;
+			}
+			ul li * {
+				transition: 0.2s ease;
+			}
+
+      .link {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+		    border-bottom: 1px solid rgba(var(--text-primary), 0.1);
+      }
+      .link:hover {
+		    border-bottom: 1px solid rgba(var(--text-primary), 0.3);
+      }
+
+			.title {
+				color: rgb(var(--text-primary));
+			}
+			.date {
+				color: rgb(var(--text-secondary));
+			}
+			ul li a:hover .date {
+				color: rgb(var(--accent));
+			}
+			@media (max-width: 768px) {
+				ul {
+					gap: 0.5em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<InternalLink class="link" href={`/${post.id}/`}>
+									<span class="title">{post.data.title}</span>
+									<span class="date">
+										<FormattedDate date={post.data.createdAt} />
+									</span>
+								</InternalLink>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
