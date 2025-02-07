@@ -18,6 +18,11 @@
     border-bottom: 1px solid rgb(var(--background));
   }
 
+  ul,
+  ol {
+    padding-left: 2em;
+  }
+
   code {
     padding: 2px 5px;
     background-color: rgb(var(--background));
