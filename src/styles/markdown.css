@@ -1,4 +1,6 @@
 .markdown {
+  letter-spacing: 0.85pt;
+
   > :not(.title) {
     margin-bottom: 1rem;
   }
@@ -13,7 +15,8 @@
   }
 
   h1,
-  h2 {
+  h2,
+  h3 {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgb(var(--background));
   }
@@ -23,11 +26,17 @@
     padding-left: 2em;
   }
 
+  code,
+  pre {
+    letter-spacing: normal;
+  }
+
   code {
     padding: 2px 5px;
     background-color: rgb(var(--background));
     border-radius: 2px;
   }
+
   pre {
     padding: 1.5em;
     border-radius: 8px;
@@ -35,10 +44,10 @@
   pre > code {
     all: unset;
   }
+
   blockquote {
     border-left: 4px solid var(--accent);
-    padding: 0 0 0 20px;
-    margin: 0px;
-    font-size: 1.333em;
+    padding: 0.25rem 0.25rem 0.25rem 1rem;
+    font-size: 1em;
   }
 }
