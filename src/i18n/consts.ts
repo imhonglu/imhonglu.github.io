@@ -20,6 +20,8 @@ export const UI = {
     "themeSelect.auto": "자동",
 
     "blog.lastUpdatedOn": "마지막 업데이트",
+    "blog.tableOfContents": "목차",
+    "blog.overview": "개요",
   },
   en: {
     "nav.home": "Blog",
@@ -35,5 +37,7 @@ export const UI = {
     "themeSelect.auto": "Auto",
 
     "blog.lastUpdatedOn": "Last updated on",
+    "blog.tableOfContents": "Table of Contents",
+    "blog.overview": "Overview",
   },
 } as const;
