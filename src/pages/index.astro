@@ -19,6 +19,7 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
+      @import url("../styles/custom-media.css");
 			ul {
 				display: flex;
 				flex-direction: column;
@@ -53,7 +54,7 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 			ul li a:hover .date {
 				color: rgb(var(--accent));
 			}
-			@media (max-width: 768px) {
+			@media (--viewport-mobile) {
 				ul {
 					gap: 0.5em;
 				}

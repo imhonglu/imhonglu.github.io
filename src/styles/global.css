@@ -1,3 +1,5 @@
+@import "./custom-media.css";
+
 :root {
   --accent: #3b82f6;
   --text-primary: 15, 18, 25;
@@ -125,7 +127,7 @@ hr {
   border-top: 1px solid rgb(var(--background));
 }
 
-@media (max-width: 768px) {
+@media (--viewport-mobile) {
   body {
     font-size: 14px;
   }
