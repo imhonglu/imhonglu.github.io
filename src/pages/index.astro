@@ -28,7 +28,7 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
       ul {
 				display: flex;
 				flex-direction: column;
-				gap: 0.5rem;
+				gap: 1rem;
 				padding: 0;
 				list-style-type: none;
 			}
@@ -43,7 +43,8 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
         display: flex;
         width: 100%;
         justify-content: space-between;
-        padding: 0.5rem 0;
+        padding-bottom: 0.5rem;
+        gap: 2rem;
         border-bottom: 1px solid hsl(var(--color-gray-3));
       }
       .link:hover {
@@ -61,10 +62,11 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 			}
 			@media (--viewport-mobile) {
 				ul {
-					gap: 0.5em;
+					gap: 0.5rem;
 				}
         .link {
           flex-direction: column;
+          gap: 0.5rem;
         }
 			}
 		</style>

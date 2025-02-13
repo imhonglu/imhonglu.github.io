@@ -44,8 +44,6 @@ const isActive = (href: string) => {
 	header {
     position: relative;
     z-index: 1;
-		padding: 0 1em;
-    background-color: hsl(var(--color-bg));
     box-shadow: var(--box-shadow);
 		border-bottom: 1px solid hsl(var(--color-gray-3));
 
@@ -72,8 +70,7 @@ const isActive = (href: string) => {
     display: inline-flex;
     align-items: center;
     height: 100%;
-		padding: 0 1em;
-		color: hsl(var(--color-text));
+		padding: 0 1rem;
   }
 
   nav {
@@ -96,6 +93,7 @@ const isActive = (href: string) => {
   }
 
 	@media (--viewport-mobile) {
+
     .nav-links {
       justify-content: flex-end;
     }

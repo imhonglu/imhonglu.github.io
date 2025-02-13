@@ -10,12 +10,12 @@ const t = useTranslations(Astro.currentLocale);
 		icon="laptop"
 		label={t('themeSelect.accessibleLabel')}
 		value="auto"
+		width="6rem"
 		options={[
 			{ label: t('themeSelect.dark'), selected: false, value: 'dark' },
 			{ label: t('themeSelect.light'), selected: false, value: 'light' },
 			{ label: t('themeSelect.auto'), selected: true, value: 'auto' },
 		]}
-		width="6.5em"
 	/>
 </theme-select>
 

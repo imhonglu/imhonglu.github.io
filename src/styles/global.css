@@ -1,17 +1,18 @@
+@import "./reset.css";
 @import "./custom-media.css";
+@import "./sr-only.css";
 
 :root {
   --color-accent: 217, 91%, 60%;
-  --color-gray-1: 224, 7%, 36%;
-  --color-gray-2: 224, 6%, 77%;
-  --color-gray-3: 224, 19%, 95%;
-  --color-text: 220, 25%, 8%;
-  --color-bg: 0, 0%, 100%;
+  --color-text: 220, 25%, 12%;
+  --color-bg: 0, 0%, 99%;
+  --color-gray-1: 224, 10%, 30%;
+  --color-gray-2: 224, 8%, 65%;
+  --color-gray-3: 224, 12%, 93%;
 
   --box-shadow: 0 2px 8px hsl(var(--color-gray-3));
 
   --nav-height: 3.5rem;
-  --mobile-toc-height: 3.5rem;
   --content-width: 45rem;
   --aside-width: 18.75rem;
 
@@ -27,21 +28,11 @@
 }
 
 :root[data-theme="dark"] {
-  --color-gray-1: 224, 6%, 77%;
-  --color-gray-2: 224, 10%, 20%;
-  --color-gray-3: 224, 8%, 15%;
-  --color-text: 0, 0%, 90%;
-  --color-bg: 224, 10%, 7%;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-* {
-  margin: 0;
+  --color-text: 220, 15%, 95%;
+  --color-bg: 224, 15%, 10%;
+  --color-gray-1: 224, 10%, 80%;
+  --color-gray-2: 224, 8%, 25%;
+  --color-gray-3: 224, 10%, 18%;
 }
 
 html[data-theme="dark"] {
@@ -54,25 +45,19 @@ html[data-theme="light"] {
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕",
     helvetica, "Apple SD Gothic Neo", sans-serif;
-  padding: 0;
   font-size: 16px;
-  text-align: left;
-  word-wrap: break-word;
+  line-height: 1.5;
   overflow-wrap: break-word;
+  background-color: hsl(var(--color-bg));
   color: hsl(var(--color-text));
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
 }
 
 main {
   width: var(--content-width);
-  max-width: calc(100% - 2em);
-  padding: 3em 1em;
+  max-width: calc(100% - 2rem);
+  padding: 3rem 1rem;
 }
 
-a {
-  color: inherit;
-}
 a:hover {
   color: hsl(var(--color-accent));
 }
@@ -81,26 +66,6 @@ img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-code {
-  overflow-wrap: anywhere;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1.25;
 }
 
 h1 {
@@ -121,16 +86,15 @@ h5 {
 h6 {
   font-size: var(--h6-font-size);
 }
-strong,
-b {
-  font-weight: 700;
-}
 
-textarea {
-  width: 100%;
-}
-table {
-  width: 100%;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.25;
+  font-weight: 600;
 }
 
 hr {
@@ -142,22 +106,7 @@ hr {
   body {
     font-size: 14px;
   }
-}
-
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-  clip: rect(1px 1px 1px 1px);
-  /* maybe deprecated but we need to support legacy browsers */
-  clip: rect(1px, 1px, 1px, 1px);
-  /* modern browsers, clip-path works inwards from each corner */
-  clip-path: inset(50%);
-  /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-  white-space: nowrap;
+  main {
+    padding: 2rem 1rem;
+  }
 }

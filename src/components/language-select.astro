@@ -10,7 +10,7 @@ const t = useTranslations(Astro.currentLocale);
     icon="translate"
     label={t('languageSelect.accessibleLabel')}
     value={Astro.currentLocale ?? DEFAULT_LOCALE}
-    width="6.5em"
+    width="6rem"
     options={Object.entries(LANGUAGES).map(([code, locale]) => ({
       value: code,
       selected: code === Astro.currentLocale,
