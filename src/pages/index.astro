@@ -47,7 +47,7 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
         border-bottom: 1px solid hsl(var(--color-gray-3));
       }
       .link:hover {
-        border-bottom: 1px solid hsl(var(--color-text));
+        border-bottom: 1px solid hsl(var(--color-gray-2));
       }
 
 			.title {
@@ -56,7 +56,7 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 			.date {
 				color: hsl(var(--color-gray-1));
 			}
-			ul li a:hover {
+			ul li a:hover .date {
 				color: hsl(var(--color-accent));
 			}
 			@media (--viewport-mobile) {
