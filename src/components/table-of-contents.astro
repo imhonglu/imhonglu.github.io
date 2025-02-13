@@ -1,0 +1,281 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import { useTranslations } from "../i18n/utils/use-translations";
+import { createTocItems } from "../utils/create-toc-items";
+import Icon from "./icon.astro";
+import TableOfContentList from "./table-of-content-list.astro";
+
+interface Props extends HTMLAttributes<"aside"> {
+  headings: MarkdownHeading[];
+}
+
+const t = useTranslations(Astro.currentLocale);
+
+const { headings, class: className, ...props } = Astro.props;
+---
+
+<div class:list={['toc-container', className]} {...props}>
+  <nav>
+    <table-of-contents>
+      <details>
+        <summary>
+          <h2>
+            {t('blog.tableOfContents')}
+            <Icon name="right-caret" class="icon" />
+          </h2>
+          <span class="mobile-label">
+            {t('blog.overview')}
+          </span>
+        </summary>
+        <TableOfContentList items={createTocItems(headings)} />
+      </details>
+    </table-of-contents>
+  </nav>
+</div>
+
+<script>
+  import { unwrap } from "@imhonglu/toolkit";
+
+  class TableOfContents extends HTMLElement {
+    private readonly breakpoint = 1024;
+
+    private observer?: IntersectionObserver;
+    private isOpen = false;
+    private resizeTimer?: NodeJS.Timeout;
+
+    private el = {
+      summary: unwrap(this.querySelector("summary")),
+      details: unwrap(this.querySelector("details")),
+      mobileLabel: unwrap(this.querySelector(".mobile-label")),
+      anchors: Array.from(this.querySelectorAll("a")),
+      headings: Array.from(
+        document.querySelectorAll("article :is(h1, h2, h3, h4, h5, h6)"),
+      ),
+    };
+
+    connectedCallback() {
+      this.observe();
+      this.el.details.addEventListener("toggle", this.handleToggle.bind(this));
+      this.el.details.addEventListener("click", this.handleClick.bind(this));
+      window.addEventListener("resize", this.handleWindowResize.bind(this));
+
+      if (!this.isMobile()) {
+        this.toggleDetails(true);
+      }
+    }
+
+    disconnectedCallback() {
+      this.unobserve();
+      this.el.details.removeEventListener("toggle", this.handleToggle.bind(this));
+      this.el.details.removeEventListener("click", this.handleClick.bind(this));
+      window.removeEventListener("resize", this.handleWindowResize.bind(this));
+    }
+
+    private observe() {
+      if (this.observer) {
+        return;
+      }
+
+      this.observer = new IntersectionObserver(
+        this.handleIntersection.bind(this),
+        { rootMargin: this.getRootMargin() },
+      );
+
+      for (const heading of this.el.headings) {
+        this.observer.observe(heading);
+      }
+    }
+
+    private unobserve() {
+      if (!this.observer) {
+        return;
+      }
+      this.observer.disconnect();
+      this.observer = undefined;
+    }
+
+    private toggleDetails(condition?: boolean) {
+      if (condition === undefined) {
+        this.el.details.open = !this.el.details.open;
+        return;
+      }
+      if (condition === this.el.details.open) {
+        return;
+      }
+      this.el.details.open = condition;
+    }
+
+    private handleClick(event: Event) {
+      const { target } = event;
+      if (!(target instanceof HTMLAnchorElement) || !this.isMobile()) {
+        return;
+      }
+
+      // For Anchor links, close the details element
+      this.toggleDetails(false);
+
+      const heading = this.el.headings.find(
+        (heading) => encodeURIComponent(heading.id) === target.hash.slice(1),
+      );
+
+      if (heading) {
+        this.setActiveHeading(heading);
+      }
+    }
+
+    private handleToggle(event: Event) {
+      if (!this.isMobile()) {
+        return;
+      }
+
+      // Store the open/closed state of TOC in mobile view
+      // This state will be used to restore the TOC state when window is resized
+      this.isOpen = this.el.details.open;
+    }
+
+    private handleWindowResize() {
+      // Temporarily remove and recreate the IntersectionObserver
+      // This is necessary to recalculate rootMargin based on the new viewport dimensions
+      this.unobserve();
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        this.observe();
+      }, 200);
+
+      // if switch to desktop view, open the TOC
+      if (!this.isMobile()) {
+        this.toggleDetails(true);
+        return;
+      }
+
+      this.toggleDetails(this.isOpen);
+    }
+
+    private handleIntersection(entries: IntersectionObserverEntry[]) {
+      for (const { isIntersecting, target } of entries) {
+        if (!isIntersecting) {
+          continue;
+        }
+
+        this.setActiveHeading(target);
+      }
+    }
+
+    private setActiveHeading(target: Element) {
+      const link = this.el.anchors.find((anchor) =>
+        anchor.hash.endsWith(encodeURIComponent(target.id)),
+      );
+
+      if (!link) {
+        return;
+      }
+
+      for (const anchor of this.el.anchors) {
+        anchor.removeAttribute("aria-current");
+      }
+      link.setAttribute("aria-current", "true");
+      this.el.mobileLabel.textContent = target.textContent;
+    }
+
+    private isMobile(): boolean {
+      return window.innerWidth < this.breakpoint;
+    }
+
+    private getRootMargin(): `-${number}px 0% ${number}%` {
+      const top = this.isMobile()
+        ? this.el.summary.getBoundingClientRect().height
+        : 0;
+
+      return `-${top}px 0% -85%`;
+    }
+  }
+
+  customElements.define("table-of-contents", TableOfContents);
+</script>
+
+
+<style>
+  @import url("../styles/custom-media.css");
+
+  .toc-container {
+    position: sticky;
+    top: 0;
+    height: 100%;
+    order: 2;
+    width: var(--aside-width);
+    background-color: hsl(var(--color-bg));
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 0.5em 0;
+    font-size: var(--h4-font-size);
+  }
+
+  h2 {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		color: hsl(var(--color-gray-1));
+    font-size: inherit;
+  }
+
+  .icon {
+    display: none;
+  }
+
+  .mobile-label {
+    display: none;
+  }
+
+  @media (--viewport-tablet) {
+    .toc-container {
+      order: 0;
+      width: 100%;
+      border-bottom: 1px solid hsl(var(--color-gray-3));
+    }
+
+    summary {
+      padding-inline: 1em;
+      font-size: var(--h6-font-size);
+    }
+
+    h2 {
+      width: 7rem;
+      padding-block: 0.5rem;
+      padding-inline: 0.5rem;
+      margin-left: 0.75rem;
+      border: 1px solid hsl(var(--color-gray-2));
+      border-radius: 0.5rem;
+      font-weight: unset;
+    }
+
+    h2:hover {
+      color: hsl(var(--color-gray-1));
+      border-color: hsl(var(--color-gray-1));
+    }
+
+    .icon {
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform-origin: center;
+      transform: translateY(-50%);
+      pointer-events: none;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.25rem;
+    }
+
+    .mobile-label {
+      display: unset;
+      padding-inline-start: 0.5rem;
+    }
+
+    details[open] .icon {
+      transform: translateY(-50%) rotate(90deg);
+    }
+  }
+</style>

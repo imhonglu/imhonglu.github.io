@@ -1,18 +1,22 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
 import BaseHead from "../components/base-head.astro";
 import Footer from "../components/footer.astro";
 import FormattedDate from "../components/formatted-date.astro";
 import Header from "../components/header.astro";
+import TableOfContents from "../components/table-of-contents.astro";
 import { DEFAULT_LOCALE } from "../i18n/consts";
 import { useTranslations } from "../i18n/utils/use-translations";
 
 type Props = CollectionEntry<"blog">["data"] & {
   id?: string;
+  headings?: MarkdownHeading[];
 };
 
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
-const { id, title, description, createdAt, updatedAt, heroImage } = Astro.props;
+const { id, title, description, createdAt, updatedAt, heroImage, headings } =
+  Astro.props;
 const t = useTranslations(locale);
 ---
 
@@ -20,7 +24,22 @@ const t = useTranslations(locale);
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
+      @import url("../styles/custom-media.css");
 			@import url("../styles/markdown.css");
+
+      .main-frame {
+        display: flex;
+      }
+      main {
+        order: 1;
+        margin-inline: calc((100% - var(--content-width)) / 2) 0;
+      }
+
+      article {
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+      }
 
 			.hero-image {
 				width: 100%;
@@ -32,68 +51,92 @@ const t = useTranslations(locale);
 				box-shadow: var(--box-shadow);
       }
 			.markdown {
-				color: rgb(var(--text-body));
+				color: hsl(var(--color-text));
 			}
 			.title {
-				padding: 1em 0;
 				text-align: center;
 				line-height: 1;
+        border-bottom: 1px solid hsl(var(--color-gray-3));
+
+        > * {
+          padding-bottom: 1rem;
+        }
 			}
 			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--text-secondary));
+				color: hsl(var(--color-gray-1));
 			}
 			.last-updated-on {
 				font-style: italic;
 			}
+
+      @media (--viewport-tablet) {
+        .main-frame {
+          flex-direction: column;
+          align-items: center;
+        }
+        main {
+          margin-inline: 0;
+        }
+      }
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="markdown">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={createdAt} />
-							{
-								updatedAt && (
-									<div class="last-updated-on">
-										{t("blog.lastUpdatedOn")} <FormattedDate date={updatedAt} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-					</div>
-					<slot />
-				</div>
-			</article>
-      {id && <div class="giscus">
-        <script src="https://giscus.app/client.js"
-          data-repo="imhonglu/imhonglu.github.io"
-          data-repo-id="R_kgDONyKRuw"
-          data-category="Blog"
-          data-category-id="DIC_kwDONyKRu84CmvMP"
-          data-mapping="specific"
-          data-term={id}
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="top"
-          data-theme="preferred_color_scheme"
-          data-lang={locale}
-          data-loading="lazy"
-          crossorigin="anonymous"
-          async>
-        </script>
-      </div>
-      }
-		</main>
+    <div class="main-frame">
+		  <main>
+        <article>
+          {heroImage &&
+            <div class="hero-image">
+              <img width={1020} height={510} src={heroImage} alt="" />
+            </div>
+          }
+          <div class="title">
+            <div class="date">
+              <FormattedDate date={createdAt} />
+              {
+                updatedAt && (
+                  <div class="last-updated-on">
+                    {t("blog.lastUpdatedOn")} <FormattedDate date={updatedAt} />
+                  </div>
+                )
+              }
+            </div>
+            <h1 id={t("blog.overview")}>{title}</h1>
+          </div>
+          <div class="markdown">
+            <slot />
+          </div>
+          {id && <div class="giscus">
+            <script src="https://giscus.app/client.js"
+              data-repo="imhonglu/imhonglu.github.io"
+              data-repo-id="R_kgDONyKRuw"
+              data-category="Blog"
+              data-category-id="DIC_kwDONyKRu84CmvMP"
+              data-mapping="specific"
+              data-term={id}
+              data-strict="0"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-input-position="top"
+              data-theme="preferred_color_scheme"
+              data-lang={locale}
+              data-loading="lazy"
+              crossorigin="anonymous"
+              async>
+            </script>
+          </div>}
+        </article>
+      </main>
+      {headings && <TableOfContents headings={[
+        {
+          slug: t("blog.overview"),
+          text: t("blog.overview"),
+          depth: 1,
+        },
+        ...headings
+      ]} />}
+    </div>
 		<Footer />
 	</body>
 </html>

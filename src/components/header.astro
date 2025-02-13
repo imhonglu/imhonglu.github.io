@@ -36,15 +36,22 @@ const isActive = (href: string) => {
 </header>
 <style>
   @import url("../styles/custom-media.css");
-	header {
-		padding: 0 1em;
-		background: var(--background);
-		box-shadow: 0 2px 8px rgba(var(--text-primary), 0.05);
-		border-bottom: 1px solid rgba(var(--text-primary), 0.05);
-	}
 
-	:root[data-theme="dark"] header {
-		box-shadow: 0 1px 3px linear-gradient(var(--background-gradient));
+  header, nav, nav > * {
+    height: var(--nav-height);
+  }
+
+	header {
+    position: relative;
+    z-index: 1;
+		padding: 0 1em;
+    background-color: hsl(var(--color-bg));
+    box-shadow: var(--box-shadow);
+		border-bottom: 1px solid hsl(var(--color-gray-3));
+
+    [data-theme="dark"] & {
+      box-shadow: none;
+    }
 	}
 
   nav,
@@ -52,17 +59,21 @@ const isActive = (href: string) => {
     display: flex;
     align-items: center;
   }
+
   nav > * {
     flex: 1;
   }
 
 	h2 {
-		font-size: 1em;
+		font-size: var(--h5-font-size);
 	}
 
   a {
-		padding: 1em;
-		color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+		padding: 0 1em;
+		color: hsl(var(--color-text));
   }
 
   nav {
@@ -77,6 +88,12 @@ const isActive = (href: string) => {
     justify-content: flex-end;
     gap: 0 0.5rem;
 	}
+
+  @media (--viewport-tablet) {
+    header {
+      box-shadow: none;
+    }
+  }
 
 	@media (--viewport-mobile) {
     .nav-links {

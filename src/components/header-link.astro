@@ -19,7 +19,7 @@ const { class: className, href, ...props } = Astro.props;
   }
   a:hover, a:active, a.active {
     font-weight: bolder;
-    color: var(--accent);
+    color: hsl(var(--color-accent));
   }
 
   a::after {
@@ -29,7 +29,7 @@ const { class: className, href, ...props } = Astro.props;
     height: 4px;
     bottom: 0;
     left: 0;
-    background-color: var(--accent);
+    background-color: hsl(var(--color-accent));
     transition: width 0.2s ease;
   }
 

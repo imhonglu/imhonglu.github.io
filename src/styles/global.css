@@ -1,25 +1,37 @@
 @import "./custom-media.css";
 
 :root {
-  --accent: #3b82f6;
-  --text-primary: 15, 18, 25;
-  --text-secondary: 96, 115, 159;
-  --background: 229, 233, 240;
-  --text-body: 34, 41, 57;
-  --background-gradient: rgba(var(--background), 50%), #fff;
-  --box-shadow: 0 2px 6px rgba(var(--text-secondary), 25%), 0 8px 24px
-    rgba(var(--text-secondary), 33%), 0 16px 32px
-    rgba(var(--text-secondary), 33%);
+  --color-accent: 217, 91%, 60%;
+  --color-gray-1: 224, 7%, 36%;
+  --color-gray-2: 224, 6%, 77%;
+  --color-gray-3: 224, 19%, 95%;
+  --color-text: 220, 25%, 8%;
+  --color-bg: 0, 0%, 100%;
+
+  --box-shadow: 0 2px 8px hsl(var(--color-gray-3));
+
+  --nav-height: 3.5rem;
+  --mobile-toc-height: 3.5rem;
+  --content-width: 45rem;
+  --aside-width: 18.75rem;
+
+  --text-base: 1rem;
+  --text-small: 0.8125rem;
+
+  --h1-font-size: 2em;
+  --h2-font-size: 1.5em;
+  --h3-font-size: 1.25em;
+  --h4-font-size: 1.125em;
+  --h5-font-size: 1em;
+  --h6-font-size: 0.85em;
 }
 
 :root[data-theme="dark"] {
-  --accent: #60a5fa;
-  --text-primary: 245, 245, 247;
-  --text-secondary: 156, 163, 175;
-  --background: 29, 29, 31;
-  --text-body: 229, 231, 235;
-  --background-gradient: rgba(var(--background), 85%),
-    rgba(var(--background), 75%);
+  --color-gray-1: 224, 6%, 77%;
+  --color-gray-2: 224, 10%, 20%;
+  --color-gray-3: 224, 8%, 15%;
+  --color-text: 0, 0%, 90%;
+  --color-bg: 224, 10%, 7%;
 }
 
 *,
@@ -47,15 +59,14 @@ body {
   text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  color: rgb(var(--text-body));
+  color: hsl(var(--color-text));
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 
 main {
-  width: 720px;
+  width: var(--content-width);
   max-width: calc(100% - 2em);
-  margin: auto;
   padding: 3em 1em;
 }
 
@@ -63,7 +74,7 @@ a {
   color: inherit;
 }
 a:hover {
-  color: var(--accent);
+  color: hsl(var(--color-accent));
 }
 
 img {
@@ -93,22 +104,22 @@ h6 {
 }
 
 h1 {
-  font-size: 2em;
+  font-size: var(--h1-font-size);
 }
 h2 {
-  font-size: 1.5em;
+  font-size: var(--h2-font-size);
 }
 h3 {
-  font-size: 1.25em;
+  font-size: var(--h3-font-size);
 }
 h4 {
-  font-size: 1em;
+  font-size: var(--h4-font-size);
 }
 h5 {
-  font-size: 0.875em;
+  font-size: var(--h5-font-size);
 }
 h6 {
-  font-size: 0.75em;
+  font-size: var(--h6-font-size);
 }
 strong,
 b {
@@ -124,15 +135,12 @@ table {
 
 hr {
   border: none;
-  border-top: 1px solid rgb(var(--background));
+  border-top: 1px solid hsl(var(--color-gray-3));
 }
 
 @media (--viewport-mobile) {
   body {
     font-size: 14px;
-  }
-  main {
-    padding: 1em;
   }
 }
 

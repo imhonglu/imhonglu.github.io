@@ -21,43 +21,56 @@ const t = useTranslations(Astro.currentLocale);
 </language-select>
 
 <script>
-import { DEFAULT_LOCALE } from "../i18n/consts";
+  import { unwrap } from "@imhonglu/toolkit";
+  import { DEFAULT_LOCALE } from "../i18n/consts";
 
   function updateLocaleInPathname(pathname: string, newLocale: string) {
     const index = document.documentElement.lang === DEFAULT_LOCALE ? 1 : 2;
-    const pathSegments = pathname.split('/').slice(index).join('/');
+    const pathSegments = pathname.split("/").slice(index).join("/");
 
-    return newLocale === DEFAULT_LOCALE ? `/${pathSegments}` : `/${newLocale}/${pathSegments}`
+    return newLocale === DEFAULT_LOCALE
+      ? `/${pathSegments}`
+      : `/${newLocale}/${pathSegments}`;
   }
 
-	class LanguageSelect extends HTMLElement {
-		constructor() {
-			super();
-			const select = this.querySelector('select');
-			if (select) {
-				select.addEventListener('change', (e) => {
-					if (e.currentTarget instanceof HTMLSelectElement) {
-						window.location.pathname = updateLocaleInPathname(
-              window.location.pathname,
-              e.currentTarget.value
-            );
-					}
-				});
+  class LanguageSelect extends HTMLElement {
+    private select = unwrap(this.querySelector("select"));
 
-				window.addEventListener('pageshow', (event) => {
-					if (!event.persisted) {
-						return;
-					}
+    connectedCallback() {
+      this.select.addEventListener("change", this.handleSelectChange.bind(this));
+      window.addEventListener("pageshow", this.handlePageShow.bind(this));
+    }
 
-					const markupSelectedIndex =
-						select.querySelector<HTMLOptionElement>('option[selected]')?.index;
+    disconnectedCallback() {
+      this.select.removeEventListener(
+        "change",
+        this.handleSelectChange.bind(this),
+      );
+      window.removeEventListener("pageshow", this.handlePageShow.bind(this));
+    }
 
-					if (markupSelectedIndex !== select.selectedIndex) {
-						select.selectedIndex = markupSelectedIndex ?? 0;
-					}
-				});
-			}
-		}
-	}
-	customElements.define('language-select', LanguageSelect);
+    private handleSelectChange(event: Event) {
+      if (event.currentTarget instanceof HTMLSelectElement) {
+        window.location.pathname = updateLocaleInPathname(
+          window.location.pathname,
+          event.currentTarget.value,
+        );
+      }
+    }
+
+    private handlePageShow(event: PageTransitionEvent) {
+      if (!event.persisted) {
+        return;
+      }
+
+      const markupSelectedIndex =
+        this.select.querySelector<HTMLOptionElement>("option[selected]")?.index;
+
+      if (markupSelectedIndex !== this.select.selectedIndex) {
+        this.select.selectedIndex = markupSelectedIndex ?? 0;
+      }
+    }
+  }
+
+  customElements.define("language-select", LanguageSelect);
 </script>

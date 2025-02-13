@@ -1,0 +1,87 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface TocItem extends MarkdownHeading {
+  children: TocItem[];
+}
+
+interface Props {
+  items: TocItem[];
+  depth?: number;
+}
+
+const { items, depth = 0 } = Astro.props;
+---
+
+<ul>
+  {
+    items.map((heading) => (
+      <li>
+        <a href={'#' + heading.slug}>
+          {heading.text}
+        </a>
+        {heading.children.length > 0 && (
+          <Astro.self items={heading.children} depth={depth + 1} />
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style define:vars={{ depth }}>
+  @import url("../styles/custom-media.css");
+
+	ul {
+		padding: 0;
+		list-style: none;
+	}
+
+	a {
+		--pad-inline: 0.5rem;
+		display: block;
+		padding-block: 0.25rem;
+		padding-inline: calc(1rem * var(--depth) + var(--pad-inline)) var(--pad-inline);
+		line-height: 1.25;
+    color: hsl(var(--color-gray-1));
+    font-size: var(--text-small);
+    text-decoration: none;
+	}
+
+  a:hover {
+    color: hsl(var(--color-text));
+  }
+
+  a[aria-current='true'] {
+    color: hsl(var(--color-accent));
+  }
+
+  @media (--viewport-tablet) {
+    a {
+      --pad-inline: 2rem;
+      display: flex;
+      justify-content: space-between;
+      gap: var(--pad-inline);
+  		border-top: 1px solid hsl(var(--color-gray-3));
+      padding-block: 0.5rem;
+      color: hsl(var(--color-text));
+      text-decoration: none;
+    }
+    :first-child > li:first-child > a {
+      border-top: 0;
+    }
+    a[aria-current='true'],
+    a[aria-current='true']:hover,
+    a[aria-current='true']:focus {
+      color: hsl(var(--color-text));
+      background-color: unset;
+    }
+    a[aria-current='true']::after {
+      content: '';
+      width: 1rem;
+      background-color: hsl(var(--color-accent));
+      mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxNCAxNCc+PHBhdGggZD0nTTEwLjkxNCA0LjIwNmEuNTgzLjU4MyAwIDAgMC0uODI4IDBMNS43NCA4LjU1NyAzLjkxNCA2LjcyNmEuNTk2LjU5NiAwIDAgMC0uODI4Ljg1N2wyLjI0IDIuMjRhLjU4My41ODMgMCAwIDAgLjgyOCAwbDQuNzYtNC43NmEuNTgzLjU4MyAwIDAgMCAwLS44NTdaJy8+PC9zdmc+Cg==');
+      mask-repeat: no-repeat;
+      flex-shrink: 0;
+    }
+  }
+</style>

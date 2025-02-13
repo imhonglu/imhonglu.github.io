@@ -20,7 +20,12 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
       @import url("../styles/custom-media.css");
-			ul {
+
+      main {
+        margin: 0 auto;
+      }
+
+      ul {
 				display: flex;
 				flex-direction: column;
 				gap: 0.5rem;
@@ -39,20 +44,20 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
         width: 100%;
         justify-content: space-between;
         padding: 0.5rem 0;
-		    border-bottom: 1px solid rgba(var(--text-primary), 0.1);
+        border-bottom: 1px solid hsl(var(--color-gray-3));
       }
       .link:hover {
-		    border-bottom: 1px solid rgba(var(--text-primary), 0.3);
+        border-bottom: 1px solid hsl(var(--color-text));
       }
 
 			.title {
-				color: rgb(var(--text-primary));
+				color: hsl(var(--color-text));
 			}
 			.date {
-				color: rgb(var(--text-secondary));
+				color: hsl(var(--color-gray-1));
 			}
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+			ul li a:hover {
+				color: hsl(var(--color-accent));
 			}
 			@media (--viewport-mobile) {
 				ul {
