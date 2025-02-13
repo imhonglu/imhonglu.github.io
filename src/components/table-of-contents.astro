@@ -175,7 +175,8 @@ const { headings, class: className, ...props } = Astro.props;
         anchor.removeAttribute("aria-current");
       }
       link.setAttribute("aria-current", "true");
-      this.el.mobileLabel.textContent = target.textContent;
+      this.el.mobileLabel.textContent =
+        target.tagName === "H1" ? target.id : target.textContent;
     }
 
     private isMobile(): boolean {
@@ -240,12 +241,16 @@ const { headings, class: className, ...props } = Astro.props;
     summary {
       padding-inline: 1em;
       font-size: var(--h6-font-size);
+      ::marker {
+        display: none;
+      }
     }
 
     h2 {
-      width: 7rem;
+      min-width: 7rem;
       padding-block: 0.5rem;
       padding-inline: 0.5rem;
+      padding-inline-end: 2rem;
       margin-left: 0.75rem;
       border: 1px solid hsl(var(--color-gray-2));
       border-radius: 0.5rem;
@@ -261,7 +266,7 @@ const { headings, class: className, ...props } = Astro.props;
       display: block;
       position: absolute;
       top: 50%;
-      right: 0.5rem;
+      right: 0.25rem;
       transform-origin: center;
       transform: translateY(-50%);
       pointer-events: none;
