@@ -215,6 +215,10 @@ const { headings, class: className, ...props } = Astro.props;
     font-size: var(--h4-font-size);
   }
 
+  summary::marker {
+    display: none;
+  }
+
   h2 {
 		position: relative;
 		display: inline-flex;
@@ -241,9 +245,6 @@ const { headings, class: className, ...props } = Astro.props;
     summary {
       padding-inline: 1em;
       font-size: var(--h6-font-size);
-      ::marker {
-        display: none;
-      }
     }
 
     h2 {
