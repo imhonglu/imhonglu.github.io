@@ -161,12 +161,7 @@ const { headings, class: className, ...props } = Astro.props;
       }, 200);
 
       // if switch to desktop view, open the TOC
-      if (!this.isTablet) {
-        this.toggleDetails(true);
-        return;
-      }
-
-      this.toggleDetails(this.isOpen);
+      this.toggleDetails(this.isTablet ? this.isOpen : true);
     }
 
     private handleIntersection(entries: IntersectionObserverEntry[]) {
