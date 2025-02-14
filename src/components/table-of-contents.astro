@@ -57,7 +57,7 @@ const { headings, class: className, ...props } = Astro.props;
     connectedCallback() {
       this.observe();
       this.el.details.addEventListener("toggle", this.handleToggle.bind(this));
-      this.el.details.addEventListener("click", this.handleClick.bind(this));
+      window.addEventListener("click", this.handleClick.bind(this));
       window.addEventListener("resize", this.handleWindowResize.bind(this));
 
       if (!this.isMobile()) {
@@ -68,7 +68,7 @@ const { headings, class: className, ...props } = Astro.props;
     disconnectedCallback() {
       this.unobserve();
       this.el.details.removeEventListener("toggle", this.handleToggle.bind(this));
-      this.el.details.removeEventListener("click", this.handleClick.bind(this));
+      window.removeEventListener("click", this.handleClick.bind(this));
       window.removeEventListener("resize", this.handleWindowResize.bind(this));
     }
 
@@ -107,13 +107,22 @@ const { headings, class: className, ...props } = Astro.props;
     }
 
     private handleClick(event: Event) {
-      const { target } = event;
-      if (!(target instanceof HTMLAnchorElement) || !this.isMobile()) {
+      if (!this.isMobile()) {
         return;
       }
 
-      // For Anchor links, close the details element
-      this.toggleDetails(false);
+      // Skip setting to false for summary element as it handles toggle behavior natively
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.tagName !== "SUMMARY"
+      ) {
+        this.toggleDetails(false);
+      }
+
+      const { target } = event;
+      if (!(target instanceof HTMLAnchorElement)) {
+        return;
+      }
 
       const heading = this.el.headings.find(
         (heading) => encodeURIComponent(heading.id) === target.hash.slice(1),
