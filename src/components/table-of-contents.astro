@@ -38,6 +38,7 @@ const { headings, class: className, ...props } = Astro.props;
   import { unwrap } from "@imhonglu/toolkit";
 
   class TableOfContents extends HTMLElement {
+    // Breakpoint for tablet view
     private readonly breakpoint = 1024;
 
     private observer?: IntersectionObserver;
@@ -61,7 +62,7 @@ const { headings, class: className, ...props } = Astro.props;
       window.addEventListener("resize", this.handleWindowResize.bind(this));
       window.addEventListener("keydown", this.handleKeyDown.bind(this));
 
-      if (!this.isMobile()) {
+      if (!this.isTablet) {
         this.toggleDetails(true);
       }
     }
@@ -118,7 +119,7 @@ const { headings, class: className, ...props } = Astro.props;
     private handleClick(event: Event) {
       const { target } = event;
 
-      if (!this.isMobile() || !(target instanceof Node)) {
+      if (!this.isTablet || !(target instanceof Node)) {
         return;
       }
 
@@ -141,7 +142,7 @@ const { headings, class: className, ...props } = Astro.props;
     }
 
     private handleToggle(event: Event) {
-      if (!this.isMobile()) {
+      if (!this.isTablet) {
         return;
       }
 
@@ -160,7 +161,7 @@ const { headings, class: className, ...props } = Astro.props;
       }, 200);
 
       // if switch to desktop view, open the TOC
-      if (!this.isMobile()) {
+      if (!this.isTablet) {
         this.toggleDetails(true);
         return;
       }
@@ -195,12 +196,12 @@ const { headings, class: className, ...props } = Astro.props;
         target.tagName === "H1" ? target.id : target.textContent;
     }
 
-    private isMobile(): boolean {
+    private get isTablet(): boolean {
       return window.innerWidth < this.breakpoint;
     }
 
     private getRootMargin(): `-${number}px 0% ${number}%` {
-      const top = this.isMobile()
+      const top = this.isTablet
         ? this.el.summary.getBoundingClientRect().height
         : 0;
 
