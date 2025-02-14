@@ -24,7 +24,7 @@ const t = useTranslations(locale);
 <!doctype html>
 <html lang={locale}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={`${title} | ${t("title")}`} description={description} />
 		<style>
       @import url("../styles/custom-media.css");
 			@import url("../styles/markdown.css");

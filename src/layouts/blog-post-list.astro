@@ -4,11 +4,12 @@ import Footer from "../components/footer.astro";
 import FormattedDate from "../components/formatted-date.astro";
 import Header from "../components/header.astro";
 import InternalLink from "../components/internal-link.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { DEFAULT_LOCALE } from "../i18n/consts";
+import { useTranslations } from "../i18n/utils/use-translations";
 import { getLocalizedBlogPosts } from "../utils/get-localized-blog-posts";
 
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const t = useTranslations(locale);
 const posts = await getLocalizedBlogPosts(locale).then((posts) =>
   posts.filter((post) => post.data.publishedAt),
 );
@@ -17,7 +18,10 @@ const posts = await getLocalizedBlogPosts(locale).then((posts) =>
 <!doctype html>
 <html lang={locale}>
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+      title={`${t("nav.home")} | ${t("title")}`}
+      description={t("description")}
+    />
 		<style>
       @import url("../styles/custom-media.css");
 

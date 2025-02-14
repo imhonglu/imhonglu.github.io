@@ -1,5 +1,4 @@
 ---
-import { SITE_TITLE } from "../consts";
 import { useTranslations } from "../i18n/utils/use-translations";
 import HeaderLink from "./header-link.astro";
 import InternalLink from "./internal-link.astro";
@@ -22,7 +21,7 @@ const isActive = (href: string) => {
 
 <header>
 	<nav>
-		<h2><InternalLink href="/">{SITE_TITLE}</InternalLink></h2>
+		<h2><InternalLink href="/">{t("title")}</InternalLink></h2>
 		<div class="nav-links">
 			<HeaderLink href="/" isActive={isActive}>{t('nav.home')}</HeaderLink>
 			<HeaderLink href="/about">{t('nav.about')}</HeaderLink>
