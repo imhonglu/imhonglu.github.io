@@ -107,6 +107,9 @@ summary::marker,
 summary::-webkit-details-marker {
   display: none;
 }
+summary:focus-visible {
+  outline: none;
+}
 
 blockquote,
 q {
