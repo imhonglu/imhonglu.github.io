@@ -82,7 +82,7 @@ const { headings, class: className, ...props } = Astro.props;
 
       this.observer = new IntersectionObserver(
         this.handleIntersection.bind(this),
-        { rootMargin: this.getRootMargin() },
+        { rootMargin: this.rootMargin },
       );
 
       for (const heading of this.el.headings) {
@@ -195,7 +195,7 @@ const { headings, class: className, ...props } = Astro.props;
       return window.innerWidth < this.breakpoint;
     }
 
-    private getRootMargin(): `-${number}px 0% ${number}%` {
+    private get rootMargin(): `-${number}px 0% ${number}%` {
       const top = this.isTablet
         ? this.el.summary.getBoundingClientRect().height
         : 0;
