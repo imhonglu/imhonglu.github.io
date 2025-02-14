@@ -59,6 +59,7 @@ const { headings, class: className, ...props } = Astro.props;
       this.el.details.addEventListener("toggle", this.handleToggle.bind(this));
       window.addEventListener("click", this.handleClick.bind(this));
       window.addEventListener("resize", this.handleWindowResize.bind(this));
+      window.addEventListener("keydown", this.handleKeyDown.bind(this));
 
       if (!this.isMobile()) {
         this.toggleDetails(true);
@@ -70,6 +71,7 @@ const { headings, class: className, ...props } = Astro.props;
       this.el.details.removeEventListener("toggle", this.handleToggle.bind(this));
       window.removeEventListener("click", this.handleClick.bind(this));
       window.removeEventListener("resize", this.handleWindowResize.bind(this));
+      window.removeEventListener("keydown", this.handleKeyDown.bind(this));
     }
 
     private observe() {
@@ -106,20 +108,25 @@ const { headings, class: className, ...props } = Astro.props;
       this.el.details.open = condition;
     }
 
+    private handleKeyDown(event: KeyboardEvent) {
+      if (!event.key.startsWith("Esc")) {
+        return;
+      }
+      this.toggleDetails(false);
+    }
+
     private handleClick(event: Event) {
-      if (!this.isMobile()) {
+      const { target } = event;
+
+      if (!this.isMobile() || !(target instanceof Node)) {
         return;
       }
 
       // Skip setting to false for summary element as it handles toggle behavior natively
-      if (
-        event.target instanceof HTMLElement &&
-        event.target.tagName !== "SUMMARY"
-      ) {
+      if (!this.el.summary.contains(target)) {
         this.toggleDetails(false);
       }
 
-      const { target } = event;
       if (!(target instanceof HTMLAnchorElement)) {
         return;
       }
