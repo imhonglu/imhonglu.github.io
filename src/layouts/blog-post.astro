@@ -17,9 +17,11 @@ type Props = CollectionEntry<"blog">["data"] & {
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
 const { id, title, description, createdAt, updatedAt, heroImage, headings } =
   Astro.props;
+
 const t = useTranslations(locale);
 ---
 
+<!doctype html>
 <html lang={locale}>
 	<head>
 		<BaseHead title={title} description={description} />

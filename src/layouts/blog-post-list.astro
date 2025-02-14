@@ -1,0 +1,96 @@
+---
+import BaseHead from "../components/base-head.astro";
+import Footer from "../components/footer.astro";
+import FormattedDate from "../components/formatted-date.astro";
+import Header from "../components/header.astro";
+import InternalLink from "../components/internal-link.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { DEFAULT_LOCALE } from "../i18n/consts";
+import { getLocalizedBlogPosts } from "../utils/get-localized-blog-posts";
+
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const posts = await getLocalizedBlogPosts(locale).then((posts) =>
+  posts.filter((post) => post.data.publishedAt),
+);
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+      @import url("../styles/custom-media.css");
+
+      main {
+        margin: 0 auto;
+      }
+
+      ul {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+				padding: 0;
+				list-style-type: none;
+			}
+			ul li {
+        width: 100%;
+			}
+			ul li * {
+				transition: 0.2s ease;
+			}
+
+      .link {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding-bottom: 0.5rem;
+        gap: 2rem;
+        border-bottom: 1px solid hsl(var(--color-gray-3));
+      }
+      .link:hover {
+        border-bottom: 1px solid hsl(var(--color-gray-2));
+      }
+
+			.title {
+				color: hsl(var(--color-text));
+			}
+			.date {
+				color: hsl(var(--color-gray-1));
+			}
+			ul li a:hover .date {
+				color: hsl(var(--color-accent));
+			}
+			@media (--viewport-mobile) {
+				ul {
+					gap: 0.5rem;
+				}
+        .link {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<InternalLink class="link" href={`/${post.id}/`}>
+									<span class="title">{post.data.title}</span>
+									<span class="date">
+										<FormattedDate date={post.data.createdAt} />
+									</span>
+								</InternalLink>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

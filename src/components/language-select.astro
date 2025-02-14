@@ -22,15 +22,11 @@ const t = useTranslations(Astro.currentLocale);
 
 <script>
   import { unwrap } from "@imhonglu/toolkit";
-  import { DEFAULT_LOCALE } from "../i18n/consts";
 
   function updateLocaleInPathname(pathname: string, newLocale: string) {
-    const index = document.documentElement.lang === DEFAULT_LOCALE ? 1 : 2;
-    const pathSegments = pathname.split("/").slice(index).join("/");
+    const pathSegments = pathname.split("/").slice(2).join("/");
 
-    return newLocale === DEFAULT_LOCALE
-      ? `/${pathSegments}`
-      : `/${newLocale}/${pathSegments}`;
+    return `/${newLocale}/${pathSegments}`;
   }
 
   class LanguageSelect extends HTMLElement {

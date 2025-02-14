@@ -1,8 +1,8 @@
 ---
 import { type CollectionEntry } from "astro:content";
 import { render } from "astro:content";
-import BlogPost from "../layouts/blog-post.astro";
-import { getLocalizedBlogPosts } from "../utils/get-localized-blog-posts";
+import BlogPost from "../../layouts/blog-post.astro";
+import { getLocalizedBlogPosts } from "../../utils/get-localized-blog-posts";
 
 export async function getStaticPaths() {
   const posts = await getLocalizedBlogPosts("en");
