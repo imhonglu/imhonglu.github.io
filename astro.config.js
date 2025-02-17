@@ -7,6 +7,8 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://imhonglu.github.io",
 
+  trailingSlash: "ignore",
+
   i18n: {
     locales: ["ko", "en"],
     defaultLocale: "en",
