@@ -1,16 +1,15 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Redirecting to your preferred language...</title>
-  <script>
-    const preferredLanguage = new Intl.Locale(navigator.language);
-    window.location.pathname = `/${preferredLanguage.language}/`;
-  </script>
-  <meta http-equiv="refresh" content="0;url=/en/">
-</head>
-<body>
-  <p>Redirecting to your preferred language version...</p>
-  <p>If you are not redirected automatically, <a href="/en/">click here</a>.</p>
-</body>
-</html>
+---
+import Layout from "../layouts/blog-post-list.astro";
+---
+<script fetchpriority="high">
+  import { LANGUAGES, DEFAULT_LOCALE } from "../i18n/consts";
+
+  const { language } = new Intl.Locale(navigator.language);
+
+  if (language in LANGUAGES) {
+    window.location.pathname = `/${language}/`;
+  } else {
+    window.location.pathname = `/${DEFAULT_LOCALE}/`;
+  }
+</script>
+<Layout />
