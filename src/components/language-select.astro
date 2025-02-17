@@ -26,7 +26,7 @@ const t = useTranslations(Astro.currentLocale);
   function updateLocaleInPathname(pathname: string, newLocale: string) {
     const pathSegments = pathname.split("/").slice(2).join("/");
 
-    return `/${newLocale}/${pathSegments}`;
+    return `/${newLocale}/${pathSegments}`.replace(/\/$/, '');
   }
 
   class LanguageSelect extends HTMLElement {
